@@ -2,8 +2,8 @@ package book_usecases
 
 import (
 	"clean_architecture_in_go/src/entities"
+	"clean_architecture_in_go/src/utils/statuses"
 	"errors"
-	"net/http"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -17,7 +17,7 @@ func TestListAllBooksWithError(t *testing.T) {
 	books, status, err := bookUsecases.ListAllBooks()
 	//
 	assert.Nil(t, books)
-	assert.Equal(t, status, http.StatusInternalServerError)
+	assert.Equal(t, status, statuses.INTERNAL_ERROR)
 	assert.EqualError(t, err, "db error")
 }
 
@@ -43,6 +43,6 @@ func TestListAllBooks(t *testing.T) {
 	books, status, err := bookUsecases.ListAllBooks()
 	//
 	assert.Equal(t, mockBooks, books)
-	assert.Equal(t, status, http.StatusOK)
+	assert.Equal(t, status, statuses.SUCCESS)
 	assert.Nil(t, err)
 }

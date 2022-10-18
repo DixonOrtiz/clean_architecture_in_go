@@ -10,14 +10,26 @@ type MockBookRepository struct {
 	mock.Mock
 }
 
+func (mock MockBookRepository) ListAllBooks() ([]entities.Book, error) {
+	args := mock.Called()
+	result := args.Get(0)
+	return result.([]entities.Book), args.Error(1)
+}
+
 func (mock MockBookRepository) ListBookByID(ID int) (entities.Book, error) {
 	args := mock.Called()
 	result := args.Get(0)
 	return result.(entities.Book), args.Error(1)
 }
 
-func (mock MockBookRepository) ListAllBooks() ([]entities.Book, error) {
+func (mock MockBookRepository) ListBookByFields(book entities.Book) (entities.Book, error) {
 	args := mock.Called()
 	result := args.Get(0)
-	return result.([]entities.Book), args.Error(1)
+	return result.(entities.Book), args.Error(1)
+}
+
+func (mock MockBookRepository) CreateBook(book entities.Book) (entities.Book, error) {
+	args := mock.Called()
+	result := args.Get(0)
+	return result.(entities.Book), args.Error(1)
 }

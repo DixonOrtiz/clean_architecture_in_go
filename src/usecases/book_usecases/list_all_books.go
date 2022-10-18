@@ -2,14 +2,14 @@ package book_usecases
 
 import (
 	"clean_architecture_in_go/src/entities"
-	"net/http"
+	"clean_architecture_in_go/src/utils/statuses"
 )
 
-func (bookUsecases *BookUsecases) ListAllBooks() ([]entities.Book, int, error) {
+func (bookUsecases *BookUsecases) ListAllBooks() ([]entities.Book, string, error) {
 	books, err := bookUsecases.BookRepository.ListAllBooks()
 	if err != nil {
-		return nil, http.StatusInternalServerError, err
+		return nil, statuses.INTERNAL_ERROR, err
 	}
 
-	return books, http.StatusOK, nil
+	return books, statuses.SUCCESS, nil
 }
