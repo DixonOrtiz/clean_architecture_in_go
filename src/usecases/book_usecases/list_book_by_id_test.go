@@ -12,7 +12,7 @@ import (
 func TestListBookWithNegativeID(t *testing.T) {
 	bookUsecases := BookUsecases{}
 	//
-	book, status, err := bookUsecases.ListBookByID(-5)
+	book, status, err := bookUsecases.ListBookByID("", -5)
 	//
 	assert.Empty(t, book)
 	assert.Equal(t, status, statuses.INPUT_ERROR)
@@ -24,7 +24,7 @@ func TestListBookWithError(t *testing.T) {
 	mockRepo.On("ListBookByID").Return(entities.Book{}, errors.New("db error"))
 	bookUsecases := BookUsecases{BookRepository: mockRepo}
 	//
-	book, status, err := bookUsecases.ListBookByID(14)
+	book, status, err := bookUsecases.ListBookByID("", 14)
 	//
 	assert.Empty(t, book)
 	assert.Equal(t, status, statuses.INTERNAL_ERROR)
@@ -36,7 +36,7 @@ func TestListNonexistentBook(t *testing.T) {
 	mockRepo.On("ListBookByID").Return(entities.Book{}, nil)
 	bookUsecases := BookUsecases{BookRepository: mockRepo}
 	//
-	book, status, err := bookUsecases.ListBookByID(27)
+	book, status, err := bookUsecases.ListBookByID("", 27)
 	//
 	assert.Empty(t, book)
 	assert.Equal(t, status, statuses.NOT_FOUND)
@@ -54,7 +54,7 @@ func TestListExistentBook(t *testing.T) {
 	mockRepo.On("ListBookByID").Return(expectedBook, nil)
 	bookUsecases := BookUsecases{BookRepository: mockRepo}
 	//
-	book, status, err := bookUsecases.ListBookByID(4)
+	book, status, err := bookUsecases.ListBookByID("", 4)
 	//
 	assert.Equal(t, expectedBook, book)
 	assert.Equal(t, status, statuses.SUCCESS)

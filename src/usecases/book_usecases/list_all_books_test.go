@@ -14,7 +14,7 @@ func TestListAllBooksWithError(t *testing.T) {
 	mockRepo.On("ListAllBooks").Return([]entities.Book{}, errors.New("db error"))
 	bookUsecases := BookUsecases{BookRepository: mockRepo}
 	//
-	books, status, err := bookUsecases.ListAllBooks()
+	books, status, err := bookUsecases.ListAllBooks("")
 	//
 	assert.Nil(t, books)
 	assert.Equal(t, status, statuses.INTERNAL_ERROR)
@@ -40,7 +40,7 @@ func TestListAllBooks(t *testing.T) {
 	mockRepo.On("ListAllBooks").Return(mockBooks, nil)
 	bookUsecases := BookUsecases{BookRepository: mockRepo}
 	//
-	books, status, err := bookUsecases.ListAllBooks()
+	books, status, err := bookUsecases.ListAllBooks("")
 	//
 	assert.Equal(t, mockBooks, books)
 	assert.Equal(t, status, statuses.SUCCESS)

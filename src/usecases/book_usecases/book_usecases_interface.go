@@ -3,7 +3,7 @@ package book_usecases
 import "clean_architecture_in_go/src/entities"
 
 type BookUsecaseInterface interface {
-	ListAllBooks() ([]entities.Book, string, error)
-	ListBookByID(ID int) (entities.Book, string, error)
-	CreateBook(book entities.Book) (entities.Book, string, error)
+	ListAllBooks(UUID string) ([]entities.Book, string, error)
+	ListBookByID(UUID string, ID int) (entities.Book, string, error)
+	CreateBook(UUID string, book entities.Book) (entities.Book, string, error)
 }

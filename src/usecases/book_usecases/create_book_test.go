@@ -12,7 +12,7 @@ import (
 func TestCreateBookWithInvalidInput(t *testing.T) {
 	bookUsecases := BookUsecases{}
 	//
-	book, status, err := bookUsecases.CreateBook(entities.Book{
+	book, status, err := bookUsecases.CreateBook("", entities.Book{
 		Title:  "",
 		Author: "",
 		Year:   0,
@@ -33,7 +33,7 @@ func TestCreateDuplicatedBook(t *testing.T) {
 	}, nil)
 	bookUsecases := BookUsecases{BookRepository: mockRepo}
 	//
-	book, status, err := bookUsecases.CreateBook(entities.Book{
+	book, status, err := bookUsecases.CreateBook("", entities.Book{
 		Title:  "100 años de soledad",
 		Author: "Gabriel García Márquez",
 		Year:   1982,
@@ -49,7 +49,7 @@ func TestCreateDuplicatedBookWithError(t *testing.T) {
 	mockRepo.On("ListBookByFields").Return(entities.Book{}, errors.New("db error validating duplicate"))
 	bookUsecases := BookUsecases{BookRepository: mockRepo}
 	//
-	book, status, err := bookUsecases.CreateBook(entities.Book{
+	book, status, err := bookUsecases.CreateBook("", entities.Book{
 		Title:  "100 años de soledad",
 		Author: "Gabriel García Márquez",
 		Year:   1982,
@@ -66,7 +66,7 @@ func TestCreateBookWithError(t *testing.T) {
 	mockRepo.On("CreateBook").Return(entities.Book{}, errors.New("db error creating book"))
 	bookUsecases := BookUsecases{BookRepository: mockRepo}
 	//
-	book, status, err := bookUsecases.CreateBook(entities.Book{
+	book, status, err := bookUsecases.CreateBook("", entities.Book{
 		Title:  "Demian",
 		Author: "Hermann Hesse",
 		Year:   1919,
@@ -89,7 +89,7 @@ func TestCreateBook(t *testing.T) {
 	mockRepo.On("CreateBook").Return(expectedBook, nil)
 	bookUsecases := BookUsecases{BookRepository: mockRepo}
 	//
-	book, status, err := bookUsecases.CreateBook(entities.Book{
+	book, status, err := bookUsecases.CreateBook("", entities.Book{
 		Title:  "Demian",
 		Author: "Hermann Hesse",
 		Year:   1919,
