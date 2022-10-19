@@ -12,24 +12,23 @@ import (
 const CreateBook = "CreateBook"
 
 func (bookHandlers *BookHandlers) CreateBook(w http.ResponseWriter, r *http.Request) {
-	UUID := logging.GenerateOperationID()
+	UUID := logging.GenerateTransactionID()
+	log := logging.NewLog(UUID, "handlers", "CreateBook")
 
 	book, err := request_input.GetBookFromBody(r)
 	if err != nil {
-		logging.Log(UUID, LAYER, CreateBook, logging.WARNING, err.Error())
+		log.Warn(err.Error())
 		http_response.Respond(w, statuses.INPUT_ERROR, nil, err)
 		return
 	}
 
 	createdBook, status, err := bookHandlers.BookUsecases.CreateBook(UUID, book)
 	if err != nil {
-		logging.Log(UUID, LAYER, CreateBook, logging.ALERT, err.Error())
+		log.Error(err.Error())
 		http_response.Respond(w, status, nil, err)
 		return
 	}
 
-	logging.Log(UUID, LAYER, CreateBook, logging.INFO,
-		fmt.Sprintf("book created: %d) %s", createdBook.ID, createdBook.Title),
-	)
+	log.Info(fmt.Sprintf("book created: %d) %s", createdBook.ID, createdBook.Title))
 	http_response.Respond(w, status, createdBook, nil)
 }

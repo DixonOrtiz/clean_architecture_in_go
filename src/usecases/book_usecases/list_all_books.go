@@ -9,12 +9,14 @@ import (
 const ListAllBooks = "ListAllBooks"
 
 func (bookUsecases *BookUsecases) ListAllBooks(UUID string) ([]entities.Book, string, error) {
+	log := logging.NewLog(UUID, "usecases", "ListAllBooks")
+
 	books, err := bookUsecases.BookRepository.ListAllBooks()
 	if err != nil {
-		logging.Log(UUID, LAYER, ListAllBooks, logging.ALERT, err.Error())
+		log.Error(err.Error())
 		return nil, statuses.INTERNAL_ERROR, err
 	}
 
-	logging.Log(UUID, LAYER, ListAllBooks, logging.INFO, "books listed")
+	log.Info("books listed")
 	return books, statuses.SUCCESS, nil
 }

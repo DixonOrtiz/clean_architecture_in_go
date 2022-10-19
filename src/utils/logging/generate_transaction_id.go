@@ -4,7 +4,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func GenerateOperationID() string {
+func GenerateTransactionID() string {
 	ID := uuid.New()
 	return ID.String()
 

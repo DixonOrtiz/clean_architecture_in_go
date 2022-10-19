@@ -12,24 +12,23 @@ import (
 const ListBookByID = "ListBookByID"
 
 func (bookHandlers *BookHandlers) ListBookByID(w http.ResponseWriter, r *http.Request) {
-	UUID := logging.GenerateOperationID()
+	UUID := logging.GenerateTransactionID()
+	log := logging.NewLog(UUID, "handlers", "ListBookByID")
 
 	ID, err := request_input.GetIDFromPath(r)
 	if err != nil {
-		logging.Log(UUID, LAYER, ListBookByID, logging.WARNING, err.Error())
+		log.Warn(err.Error())
 		http_response.Respond(w, statuses.INPUT_ERROR, nil, err)
 		return
 	}
 
 	book, status, err := bookHandlers.BookUsecases.ListBookByID(UUID, ID)
 	if err != nil {
-		logging.Log(UUID, LAYER, ListBookByID, logging.ALERT, err.Error())
+		log.Error(err.Error())
 		http_response.Respond(w, status, nil, err)
 		return
 	}
 
-	logging.Log(UUID, LAYER, ListBookByID, logging.INFO,
-		fmt.Sprintf("listed book with id: %d", book.ID),
-	)
+	log.Info(fmt.Sprintf("listed book with id: %d", book.ID))
 	http_response.Respond(w, status, book, nil)
 }

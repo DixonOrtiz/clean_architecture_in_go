@@ -11,28 +11,27 @@ import (
 const ListBookByID = "ListBookByID"
 
 func (bookUsecases *BookUsecases) ListBookByID(UUID string, ID int) (entities.Book, string, error) {
+	log := logging.NewLog(UUID, "usecases", "ListBookByID")
 	emptyBook := entities.Book{}
 
 	if ID <= 0 {
 		message := "the id must be a positive integer"
-		logging.Log(UUID, LAYER, ListBookByID, logging.WARNING, message)
+		log.Warn(message)
 		return emptyBook, statuses.INPUT_ERROR, errors.New(message)
 	}
 
 	book, err := bookUsecases.BookRepository.ListBookByID(ID)
 	if err != nil {
-		logging.Log(UUID, LAYER, ListBookByID, logging.ALERT, err.Error())
+		log.Error(err.Error())
 		return emptyBook, statuses.INTERNAL_ERROR, err
 	}
 
 	if book.ID == 0 {
-		err = fmt.Errorf("the book with id: %d does not exist", ID)
-		logging.Log(UUID, LAYER, ListBookByID, logging.WARNING, err.Error())
-		return emptyBook, statuses.NOT_FOUND, err
+		message := fmt.Sprintf("the book with id: %d does not exist", ID)
+		log.Warn(message)
+		return emptyBook, statuses.NOT_FOUND, errors.New(message)
 	}
 
-	logging.Log(UUID, LAYER, ListBookByID, logging.INFO,
-		fmt.Sprintf("listed book with id: %d", book.ID),
-	)
+	log.Info(fmt.Sprintf("listed book with id: %d", book.ID))
 	return book, statuses.SUCCESS, nil
 }
